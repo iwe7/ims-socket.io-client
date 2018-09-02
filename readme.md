@@ -24,5 +24,5 @@ socket.subscribe(res=>{
 // 发送消息 等同于 socket.send(data);
 socket.next(data);
 // 取消订阅时关闭连接 socket.close();
-socket.unsubject(');
+socket.unsubject();
 ```
