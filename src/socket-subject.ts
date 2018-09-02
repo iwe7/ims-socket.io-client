@@ -26,6 +26,7 @@ export class SocketSubject<T> extends Subject<T> {
     _subscribe(subscriber: Subscriber<T>): Subscription {
         this.socket = connect(this.url, {});
         this.socket.onconnect = () => {
+            this.socket.connected = true;
             this.socket.on('message', (data: T) => {
                 super.next(data);
             });
