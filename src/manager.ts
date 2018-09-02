@@ -1,5 +1,7 @@
 import eio = require('engine.io-client');
 import parser = require('socket.io-parser');
+import { Encoder, Decoder } from 'socket.io-parser';
+
 import bind = require('component-bind');
 import debug2 = require('debug');
 const debug: debug2.IDebugger = debug2('socket.io-client:manager');
@@ -43,7 +45,6 @@ export interface ManagerOpts extends eio.SocketOptions {
   ca?: string | string[];
   ciphers?: string;
   rejectUnauthorized?: boolean;
-  parser?: any;
 }
 export class Manager extends Emitter {
   nsps: { [namespace: string]: Socket } = {};
@@ -91,9 +92,8 @@ export class Manager extends Emitter {
     this.timeout(null == opts.timeout ? 20000 : opts.timeout);
     this.lastPing = null;
     this.packetBuffer = [];
-    var _parser = opts.parser || parser;
-    this.encoder = new _parser.Encoder();
-    this.decoder = new _parser.Decoder();
+    this.encoder = new Encoder();
+    this.decoder = new Decoder();
     this.autoConnect = opts.autoConnect !== false;
     console.log(this.autoConnect);
     if (this.autoConnect) this.open();

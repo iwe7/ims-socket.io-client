@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const eio = require("engine.io-client");
-const parser = require("socket.io-parser");
+const socket_io_parser_1 = require("socket.io-parser");
 const bind = require("component-bind");
 const debug2 = require("debug");
 const debug = debug2('socket.io-client:manager');
@@ -43,9 +43,8 @@ class Manager extends Emitter {
         this.timeout(null == opts.timeout ? 20000 : opts.timeout);
         this.lastPing = null;
         this.packetBuffer = [];
-        var _parser = opts.parser || parser;
-        this.encoder = new _parser.Encoder();
-        this.decoder = new _parser.Decoder();
+        this.encoder = new socket_io_parser_1.Encoder();
+        this.decoder = new socket_io_parser_1.Decoder();
         this.autoConnect = opts.autoConnect !== false;
         console.log(this.autoConnect);
         if (this.autoConnect)

@@ -78,19 +78,20 @@ export class Socket extends Emitter {
     if (this.io.autoConnect) this.open();
   }
 
-  on(event: 'connect', listener: Function): Emitter;
-  on(event: 'connect_error', listener: Function): Emitter;
-  on(event: 'connect_timeout', listener: Function): Emitter;
-  on(event: 'connecting', listener: Function): Emitter;
-  on(event: 'disconnect', listener: Function): Emitter;
-  on(event: 'error', listener: Function): Emitter;
-  on(event: 'reconnect', listener: Function): Emitter;
-  on(event: 'reconnect_attempt', listener: Function): Emitter;
-  on(event: 'reconnect_failed', listener: Function): Emitter;
-  on(event: 'reconnect_error', listener: Function): Emitter;
-  on(event: 'reconnecting', listener: Function): Emitter;
-  on(event: 'ping', listener: Function): Emitter;
-  on(event: 'pong', listener: Function): Emitter;
+  on(event: 'connect', listener: () => void): Emitter;
+  on(event: 'connect_error', listener: (err: Error) => void): Emitter;
+  on(event: 'connect_timeout', listener: () => void): Emitter;
+  on(event: 'connecting', listener: (attempt: number) => void): Emitter;
+  on(event: 'disconnect', listener: () => void): Emitter;
+  on(event: 'error', listener: (err: Error) => void): Emitter;
+  on(event: 'reconnect', listener: (attempt: number) => void): Emitter;
+  on(event: 'reconnect_attempt', listener: () => void): Emitter;
+  on(event: 'reconnect_failed', listener: () => void): Emitter;
+  on(event: 'reconnect_error', listener: (err: Error) => void): Emitter;
+  on(event: 'reconnecting', listener: (attempt: number) => void): Emitter;
+  on(event: 'ping', listener: () => void): Emitter;
+  on(event: 'pong', listener: () => void): Emitter;
+  on(event: 'message', listener: (data: any) => void): Emitter;
   on(event: string, listener: Function): Emitter {
     return super.on(event, listener);
   }

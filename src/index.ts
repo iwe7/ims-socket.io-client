@@ -1,13 +1,14 @@
 import { url, Url } from './url';
-import { Manager } from './manager';
+import { Manager, ManagerOpts } from './manager';
 import { Socket } from './socket';
 
 var parser = require('socket.io-parser');
 var debug = require('debug')('socket.io-client');
 export const managers = {};
 const cache = managers;
-export type ConnectFunction = (uri, opts) => Socket;
-export const connect: ConnectFunction = (uri, opts): Socket => {
+export interface ConnectOption extends ManagerOpts { }
+export type ConnectFunction = (uri: string, opts: ConnectOption) => Socket;
+export const connect: ConnectFunction = (uri: string, opts: ConnectOption): Socket => {
   if (typeof uri === 'object') {
     opts = uri;
     uri = undefined;

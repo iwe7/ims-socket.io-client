@@ -35,7 +35,6 @@ export interface ManagerOpts extends eio.SocketOptions {
     ca?: string | string[];
     ciphers?: string;
     rejectUnauthorized?: boolean;
-    parser?: any;
 }
 export declare class Manager extends Emitter {
     opts?: ManagerOpts;
