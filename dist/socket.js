@@ -63,6 +63,9 @@ class Socket extends Emitter {
         if (this.io.autoConnect)
             this.open();
     }
+    on(event, listener) {
+        return super.on(event, listener);
+    }
     subEvents() {
         if (this.subs)
             return;

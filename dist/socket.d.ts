@@ -19,6 +19,19 @@ export declare class Socket extends Emitter {
     query: any;
     io: Manager;
     constructor(io: Manager | string, nsp?: string, opts?: any);
+    on(event: 'connect', listener: Function): Emitter;
+    on(event: 'connect_error', listener: Function): Emitter;
+    on(event: 'connect_timeout', listener: Function): Emitter;
+    on(event: 'connecting', listener: Function): Emitter;
+    on(event: 'disconnect', listener: Function): Emitter;
+    on(event: 'error', listener: Function): Emitter;
+    on(event: 'reconnect', listener: Function): Emitter;
+    on(event: 'reconnect_attempt', listener: Function): Emitter;
+    on(event: 'reconnect_failed', listener: Function): Emitter;
+    on(event: 'reconnect_error', listener: Function): Emitter;
+    on(event: 'reconnecting', listener: Function): Emitter;
+    on(event: 'ping', listener: Function): Emitter;
+    on(event: 'pong', listener: Function): Emitter;
     /**
      * Subscribe to open, close and packet events
      *
