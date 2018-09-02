@@ -1,21 +1,13 @@
-
-/**
- * Module dependencies.
- */
-
 import eio = require('engine.io-client');
 import parser = require('socket.io-parser');
 import bind = require('component-bind');
 import debug2 = require('debug');
 const debug: debug2.IDebugger = debug2('socket.io-client:manager');
 import indexOf = require('indexof');
-// import "backo2";
 import Backoff = require('backo2');
 import Emitter = require('component-emitter');
-
 import { on } from './on';
 import { Socket } from './socket';
-import { Url } from './url';
 
 const has = Object.prototype.hasOwnProperty;
 export interface ManagerOpts extends eio.SocketOptions {
@@ -54,7 +46,7 @@ export interface ManagerOpts extends eio.SocketOptions {
   parser?: any;
 }
 export class Manager extends Emitter {
-  nsps: { [namespace: string]: Socket };
+  nsps: { [namespace: string]: Socket } = {};
   subs: any;
   backoff: Backoff;
   _reconnectionDelay: any;
@@ -103,6 +95,7 @@ export class Manager extends Emitter {
     this.encoder = new _parser.Encoder();
     this.decoder = new _parser.Decoder();
     this.autoConnect = opts.autoConnect !== false;
+    console.log(this.autoConnect);
     if (this.autoConnect) this.open();
   }
 
@@ -328,22 +321,19 @@ export class Manager extends Emitter {
 
   socket(nsp: string, opts): Socket {
     let socket = this.nsps[nsp];
-    const onConnecting = () => {
-      if (!~indexOf(self.connecting, socket)) {
-        self.connecting.push(socket);
-      }
-    }
     if (!socket) {
       socket = new Socket(this, nsp, opts);
       this.nsps[nsp] = socket;
-      var self = this;
-      socket.on('connecting', onConnecting);
-      socket.on('connect', function () {
-        socket.id = self.generateId(nsp);
+      socket.on('connecting', () => {
+        console.log('onConnecting');
+        if (!~indexOf(this.connecting, socket)) {
+          this.connecting.push(socket);
+          console.log(this.connecting);
+        }
       });
-      if (this.autoConnect) {
-        onConnecting();
-      }
+      socket.on('connect', () => {
+        socket.id = this.generateId(nsp);
+      });
     }
     return socket;
   };

@@ -1,7 +1,4 @@
 "use strict";
-/**
- * Module dependencies.
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 const eio = require("engine.io-client");
 const parser = require("socket.io-parser");
@@ -9,7 +6,6 @@ const bind = require("component-bind");
 const debug2 = require("debug");
 const debug = debug2('socket.io-client:manager');
 const indexOf = require("indexof");
-// import "backo2";
 const Backoff = require("backo2");
 const Emitter = require("component-emitter");
 const on_1 = require("./on");
@@ -19,6 +15,7 @@ class Manager extends Emitter {
     constructor(uri, opts) {
         super();
         this.opts = opts;
+        this.nsps = {};
         this.readyState = 'closed';
         this.connecting = [];
         this.encoding = false;
@@ -50,6 +47,7 @@ class Manager extends Emitter {
         this.encoder = new _parser.Encoder();
         this.decoder = new _parser.Decoder();
         this.autoConnect = opts.autoConnect !== false;
+        console.log(this.autoConnect);
         if (this.autoConnect)
             this.open();
     }
@@ -260,22 +258,19 @@ class Manager extends Emitter {
      */
     socket(nsp, opts) {
         let socket = this.nsps[nsp];
-        const onConnecting = () => {
-            if (!~indexOf(self.connecting, socket)) {
-                self.connecting.push(socket);
-            }
-        };
         if (!socket) {
             socket = new socket_1.Socket(this, nsp, opts);
             this.nsps[nsp] = socket;
-            var self = this;
-            socket.on('connecting', onConnecting);
-            socket.on('connect', function () {
-                socket.id = self.generateId(nsp);
+            socket.on('connecting', () => {
+                console.log('onConnecting');
+                if (!~indexOf(this.connecting, socket)) {
+                    this.connecting.push(socket);
+                    console.log(this.connecting);
+                }
             });
-            if (this.autoConnect) {
-                onConnecting();
-            }
+            socket.on('connect', () => {
+                socket.id = this.generateId(nsp);
+            });
         }
         return socket;
     }

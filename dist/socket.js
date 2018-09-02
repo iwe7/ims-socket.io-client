@@ -3,14 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Module dependencies.
  */
-var parser = require('socket.io-parser');
-var Emitter = require('component-emitter');
-var toArray = require('to-array');
+const parser = require("socket.io-parser");
+const Emitter = require("component-emitter");
+const toArray = require("to-array");
 const on_1 = require("./on");
-var bind = require('component-bind');
-var debug = require('debug')('socket.io-client:socket');
-var parseqs = require('parseqs');
-var hasBin = require('has-binary2');
+const bind = require("component-bind");
+const debug2 = require("debug");
+const debug = debug2('socket.io-client:socket');
+const parseqs = require("parseqs");
+const hasBin = require("has-binary2");
 /**
  * Internal events (blacklisted).
  * These events can't be emitted by the user.
@@ -93,7 +94,7 @@ class Socket extends Emitter {
     emit(ev, ...args) {
         if (events.hasOwnProperty(ev)) {
             emit.apply(this, arguments);
-            return this;
+            return true;
         }
         let packet = {
             type: (this.flags.binary !== undefined ? this.flags.binary : hasBin(args)) ? parser.BINARY_EVENT : parser.EVENT,
@@ -101,7 +102,6 @@ class Socket extends Emitter {
         };
         packet.options = {};
         packet.options.compress = !this.flags || false !== this.flags.compress;
-        // event ack callback
         if ('function' === typeof args[args.length - 1]) {
             debug('emitting packet with ack id %d', this.ids);
             this.acks[this.ids] = args.pop();
@@ -114,7 +114,7 @@ class Socket extends Emitter {
             this.sendBuffer.push(packet);
         }
         this.flags = {};
-        return this;
+        return true;
     }
     packet(packet) {
         packet.nsp = this.nsp;

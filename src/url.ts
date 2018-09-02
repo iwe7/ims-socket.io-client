@@ -46,7 +46,7 @@ export function url(uri: string, loc?: Location): Url {
       obj.port = '443';
     }
   }
-  obj.path = obj.path || '/';
+  obj.path = obj.path || '/socket.io';
   var ipv6 = obj.host.indexOf(':') !== -1;
   var host = ipv6 ? '[' + obj.host + ']' : obj.host;
   // define unique id

@@ -4,14 +4,15 @@ import { Manager, ManagerOpts } from './manager';
  * Module dependencies.
  */
 
-var parser = require('socket.io-parser');
-var Emitter = require('component-emitter');
-var toArray = require('to-array');
+import parser = require('socket.io-parser');
+import Emitter = require('component-emitter');
+import toArray = require('to-array');
 import { on } from './on';
-var bind = require('component-bind');
-var debug = require('debug')('socket.io-client:socket');
-var parseqs = require('parseqs');
-var hasBin = require('has-binary2');
+import bind = require('component-bind');
+import debug2 = require('debug');
+const debug: debug2.IDebugger = debug2('socket.io-client:socket');
+import parseqs = require('parseqs');
+import hasBin = require('has-binary2');
 
 /**
  * Internal events (blacklisted).
@@ -112,35 +113,29 @@ export class Socket extends Emitter {
     return this;
   }
 
-  emit(ev: string, ...args: any[]) {
+  emit(ev: string, ...args: any[]): boolean {
     if (events.hasOwnProperty(ev)) {
       emit.apply(this, arguments);
-      return this;
+      return true;
     }
     let packet: any = {
       type: (this.flags.binary !== undefined ? this.flags.binary : hasBin(args)) ? parser.BINARY_EVENT : parser.EVENT,
       data: args
     };
-
     packet.options = {};
     packet.options.compress = !this.flags || false !== this.flags.compress;
-
-    // event ack callback
     if ('function' === typeof args[args.length - 1]) {
       debug('emitting packet with ack id %d', this.ids);
       this.acks[this.ids] = args.pop();
       packet.id = this.ids++;
     }
-
     if (this.connected) {
       this.packet(packet);
     } else {
       this.sendBuffer.push(packet);
     }
-
     this.flags = {};
-
-    return this;
+    return true;
   }
 
   packet(packet) {

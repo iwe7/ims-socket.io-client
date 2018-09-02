@@ -6,7 +6,7 @@ var parser = require('socket.io-parser');
 var debug = require('debug')('socket.io-client');
 exports.managers = {};
 const cache = exports.managers;
-function connect(uri, opts) {
+exports.connect = (uri, opts) => {
     if (typeof uri === 'object') {
         opts = uri;
         uri = undefined;
@@ -35,8 +35,7 @@ function connect(uri, opts) {
         opts.query = parsed.query;
     }
     return io.socket(parsed.path, opts);
-}
-exports.connect = connect;
+};
 exports.protocol = parser.protocol;
 var manager_2 = require("./manager");
 exports.Manager = manager_2.Manager;

@@ -6,7 +6,8 @@ var parser = require('socket.io-parser');
 var debug = require('debug')('socket.io-client');
 export const managers = {};
 const cache = managers;
-export function connect(uri, opts): Socket {
+export type ConnectFunction = (uri, opts) => Socket;
+export const connect: ConnectFunction = (uri, opts): Socket => {
   if (typeof uri === 'object') {
     opts = uri;
     uri = undefined;
@@ -19,9 +20,7 @@ export function connect(uri, opts): Socket {
   const sameNamespace = cache[id] && path in cache[id].nsps;
   const newConnection = opts.forceNew || opts['force new connection'] ||
     false === opts.multiplex || sameNamespace;
-
   let io: Manager;
-
   if (newConnection) {
     debug('ignoring socket cache for %s', source);
     io = new Manager(source, opts);

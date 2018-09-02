@@ -1,5 +1,5 @@
 import { Manager } from './manager';
-declare var Emitter: any;
+import Emitter = require('component-emitter');
 /**
  * `Socket` constructor.
  *
@@ -29,7 +29,7 @@ export declare class Socket extends Emitter {
     open(): Socket;
     connect(): Socket;
     send(...args: any[]): this;
-    emit(ev: string, ...args: any[]): this;
+    emit(ev: string, ...args: any[]): boolean;
     packet(packet: any): void;
     onopen(): void;
     onclose(reason: any): void;
@@ -46,4 +46,3 @@ export declare class Socket extends Emitter {
     compress(compress: boolean): Socket;
     binary(binary: any): this;
 }
-export {};

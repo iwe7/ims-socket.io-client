@@ -1,6 +1,3 @@
-/**
- * Module dependencies.
- */
 import eio = require('engine.io-client');
 import Backoff = require('backo2');
 import Emitter = require('component-emitter');
